@@ -34,23 +34,36 @@ function enviarConfirmacionReserva(nombreCliente) {
 
 // Función principal para manejar una reserva
 async function hacerReserva(nombreCliente, mesasSolicitadas) {
-  try {
-    console.log("Verificando disponibilidad de mesas...");
-    const disponibilidad = await verificarDisponibilidad(mesasSolicitadas);  // Llama a la función de verificación
-    
-    // Si hay mesas disponibles, llama a la función para enviar la confirmación.
-    console.log(`¡Reserva Aceptada!. Estimado ${nombreCliente}, se han reservado ${disponibilidad} mesas.`);
 
-    console.log("Enviando correo de confirmación...");
+// Código para mostrar la información en un HTML
+    const resultado = document.getElementById("resultado");
+    const error = document.getElementById("error");
+    resultado.innerText = "";
+    error.innerText = "";
+      
+  try {
+    resultado.innerText = "Verificando disponibilidad de mesas...";
+    const disponibilidad = await verificarDisponibilidad(mesasSolicitadas);  // Llama a la función de verificación
+// Si hay mesas disponibles, llama a la función para enviar la confirmación.
+    resultado.innerText = `¡Reserva Aceptada!. Estimado ${nombreCliente}, se han reservado ${disponibilidad} mesas.`;
+
+    resultado.innerText += "\nEnviando correo de confirmación...";
     const correoConfirmacion = await enviarConfirmacionReserva(nombreCliente);
-    console.log(correoConfirmacion);
+    resultado.innerText += `\n${correoConfirmacion}`;
 
     // Si no hay mesas disponibles o si ocurre un error, captura el error.
   } catch (error) {
-    console.log("Error:", error);  // Maneja los errores en la promesa
-    return Promise.reject("Lo sentimos pero su reservación no es posible");
+    error.innerText = err; // Maneja los errores en la promesa
   }
 }
 
-// Llamada de prueba
-hacerReserva("Juan Pérez", 3);  // Intenta hacer una reserva para 3 personas
+// Función para iniciar la reservación
+function iniciarReservacion () {
+    const nombre = document.getElementById("nombre").value;
+      const mesas = parseInt(document.getElementById("mesas").value, 10);
+      if (nombre && mesas > 0) {
+        hacerReserva(nombre, mesas);
+      } else {
+        document.getElementById("error").innerText = "Por favor ingresa un nombre y número de mesas válido.";
+      }
+}

@@ -9,13 +9,13 @@
     
     <h1>Reservación de Mesas</h1>
 
-    <label for="costumername">Nombre del cliente:</label>
-    <input type="text" id="costumername" required>
+    <label for="nombre">Nombre del cliente:</label>
+    <input type="text" id="nombre" required>
 
-    <label for="">Número de mesas:</label>
-    <input type="text" id="tables" required min="1">
+    <label for="mesas">Número de mesas:</label>
+    <input type="number" id="mesas" required min="1">
 
-    <button onclick="">Reservas mesas</button>
+    <button onclick="iniciarReservacion()">Reservas mesas</button>
 
     <div id="resultado"></div>
     <div id="error"></div>
