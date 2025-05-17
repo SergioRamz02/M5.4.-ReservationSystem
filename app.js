@@ -1,4 +1,5 @@
 // Promesas, async y await para un Sistema de Reservación para un Restaurante.
+
 // Simulando una base de datos de mesas
 const mesasDisponibles = 5;  // Número de mesas disponibles para reservar
 
@@ -6,8 +7,12 @@ const mesasDisponibles = 5;  // Número de mesas disponibles para reservar
 function verificarDisponibilidad(mesasSolicitadas) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      // Completa la lógica aquí: Si hay suficientes mesas disponibles, resuelve la promesa, 
-      // de lo contrario, recházala con un mensaje adecuado.
+      // Si hay suficientes mesas disponibles, resuelve la promesa, de lo contrario, recházala con un mensaje adecuado.
+      if(mesasSolicitadas <= mesasDisponibles){
+        return resolve(mesasSolicitadas);
+      }else{
+        reject("Lo sentimos, pero no tenemos mesas disponibles");
+      }
     }, 2000);  // Simula un retraso en la verificación (2 segundos)
   });
 }
@@ -16,8 +21,13 @@ function verificarDisponibilidad(mesasSolicitadas) {
 function enviarConfirmacionReserva(nombreCliente) {
   return new Promise((resolve, reject) => {
     setTimeout(() => {
-      // Completa la lógica aquí: Simula un envío de correo. Usa Math.random() 
-      // para simular si el correo se envió correctamente o si ocurrió un error.
+      // Simula un envío de correo. Usa Math.random() para simular si el correo se envió correctamente o si ocurrió un error.
+      const exito = Math.random() > 0.2; // 80% de probabilidad de éxito
+      if (exito) {
+        resolve(`Correo de confirmación enviado a ${nombreCliente}.`);
+      } else {
+        reject("Hubo un error al enviar el correo de confirmación.");
+      }
     }, 1500);  // Simula el envío de un correo (1.5 segundos)
   });
 }
@@ -28,10 +38,17 @@ async function hacerReserva(nombreCliente, mesasSolicitadas) {
     console.log("Verificando disponibilidad de mesas...");
     const disponibilidad = await verificarDisponibilidad(mesasSolicitadas);  // Llama a la función de verificación
     
-    // Completa el flujo aquí: Si hay mesas disponibles, llama a la función para enviar la confirmación.
+    // Si hay mesas disponibles, llama a la función para enviar la confirmación.
+    console.log(`¡Reserva Aceptada!. Estimado ${nombreCliente}, se han reservado ${disponibilidad} mesas.`);
+
+    console.log("Enviando correo de confirmación...");
+    const correoConfirmacion = await enviarConfirmacionReserva(nombreCliente);
+    console.log(correoConfirmacion);
+
     // Si no hay mesas disponibles o si ocurre un error, captura el error.
   } catch (error) {
     console.log("Error:", error);  // Maneja los errores en la promesa
+    return Promise.reject("Lo sentimos pero su reservación no es posible");
   }
 }
 
